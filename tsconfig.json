@@ -16,7 +16,7 @@
     "isolatedModules": true,
     "jsx": "react",
     "declaration": true,
-    "outDir": "build"
+    "outDir": "lib"
   },
   "include": ["src/index.tsx"]
 }

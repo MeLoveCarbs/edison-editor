@@ -1,7 +1,7 @@
 # dependencies
 /node_modules
 
-/build
+/lib
 
 # misc
 .DS_Store
@@ -10,6 +10,7 @@
 .env.test.local
 .env.production.local
 
+package-lock.json
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
