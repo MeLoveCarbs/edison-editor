@@ -1,1 +1,0 @@
-import { onAddBlock } from "./index";
