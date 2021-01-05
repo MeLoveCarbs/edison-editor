@@ -3,6 +3,9 @@
 
 /lib
 
+/examples/node_modules
+/examples/.eslintcache
+
 # misc
 .DS_Store
 .env.local
