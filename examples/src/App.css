@@ -1,0 +1,10 @@
+.App {
+  text-align: center;
+  background-color: '#d1d1d1';
+  padding: 10px;
+}
+
+.edisonEditorContainer {
+  width: 100%;
+  height: 200px;
+}
