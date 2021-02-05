@@ -1,28 +1,15 @@
 import React from "react";
-import { Editor, EditorProps, DraftInlineStyleType } from "draft-js";
-import { styleMap } from "./styles";
-import {
-  onAddBlock,
-  BlockProps,
-  BlockType as CustomBlockType,
-  BlockRenderer,
+import { Editor, EditorProps } from "draft-js";
+import { styleMap, styleRender } from "./styles";
+import { blockRender } from "./block";
+
+export type { InlineStyleType } from "./styles";
+export type {
+  BlockType as AtomicBlockType,
+  BlockProps as AtomicBlockProps,
 } from "./block";
 
-type BlockType =
-  | "unstyled"
-  | "paragraph"
-  | "header-one"
-  | "header-two"
-  | "header-three"
-  | "header-four"
-  | "header-five"
-  | "header-six"
-  | "unordered-list-item"
-  | "ordered-list-item"
-  | "blockquote"
-  | "code-block"
-  | "atomic";
-type StyleType = DraftInlineStyleType | keyof typeof styleMap;
+export * from "./utils";
 
 type WithoutProps =
   | "blockRendererFn"
@@ -31,19 +18,16 @@ type WithoutProps =
   | "customStyleFn";
 type Props = Omit<EditorProps, WithoutProps>;
 
-// RichUtils.toggleBlockType;
 const EdisonEditor = React.forwardRef<Editor, Props>((props: Props, ref) => {
   return (
     <Editor
       ref={ref}
       {...props}
       customStyleMap={styleMap}
-      blockRendererFn={BlockRenderer}
+      customStyleFn={styleRender}
+      blockRendererFn={blockRender}
     />
   );
 });
 
 export default EdisonEditor;
-
-export { onAddBlock };
-export type { BlockProps, BlockType, CustomBlockType, StyleType };

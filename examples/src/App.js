@@ -1,7 +1,8 @@
 import React, { useState, createRef } from "react";
 import { EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
-import EdisonEditor from "edison-editor";
-import './App.css';
+import EdisonEditor, { EdisonUtil } from "edison-editor";
+import { FormattingMenu, EditorActionMap } from "./Controls";
+import "./App.css";
 
 function App() {
   const _draftEditorRef = createRef();
@@ -34,19 +35,52 @@ function App() {
     }
   };
 
+  const onDraftBaseAction = (option) => {
+    if (!_draftEditorRef.current) {
+      return;
+    }
+    const action = EditorActionMap[option];
+    if (!action || !action.key) {
+      return;
+    }
+    if (action.key === "CLEAR") {
+      setEditorState(EdisonUtil.clearAllInlineStyle(editorState));
+      return;
+    }
+    if (action.key === "indent-increase") {
+      setEditorState(EdisonUtil.indentIncrease(editorState));
+      return;
+    }
+    if (action.key === "indent-decrease") {
+      setEditorState(EdisonUtil.indentDecrease(editorState));
+      return;
+    }
+    if (action.isBlockType) {
+      setEditorState(RichUtils.toggleBlockType(editorState, action.key));
+    } else {
+      setEditorState(RichUtils.toggleInlineStyle(editorState, action.key));
+    }
+  };
+
   return (
     <>
-    <div className="App">
-      <h3>EdisonEditor Test</h3>
-      <EdisonEditor
-        ref={_draftEditorRef}
-        editorState={editorState}
-        onChange={setEditorState}
-        handleKeyCommand={handleKeyCommand}
-        keyBindingFn={mapKeyToEditorCommand}
-        placeholder={placeholder}
-      />
-    </div>
+      <div className="App">
+        <h3>EdisonEditor Test</h3>
+        <div className="edisonEditorContainer">
+          <FormattingMenu
+            onPress={(style) => onDraftBaseAction(style)}
+            activeFormats={editorState.getCurrentInlineStyle().toArray()}
+          />
+          <EdisonEditor
+            ref={_draftEditorRef}
+            editorState={editorState}
+            onChange={setEditorState}
+            handleKeyCommand={handleKeyCommand}
+            keyBindingFn={mapKeyToEditorCommand}
+            placeholder={placeholder}
+          />
+        </div>
+      </div>
     </>
   );
 }
