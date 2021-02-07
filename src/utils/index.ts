@@ -1,8 +1,8 @@
 import {
   EditorState,
   ContentBlock,
-  RichUtils,
   AtomicBlockUtils,
+  Modifier,
 } from "draft-js";
 import { BlockType, BlockProps } from "../block";
 
@@ -25,6 +25,7 @@ function getSelectedBlocks(editorState: EditorState) {
   }
   return selectedBlocks;
 }
+
 function onAddAtomicBlock<T extends BlockType>(
   entityType: T,
   params: BlockProps<T>,
@@ -44,12 +45,27 @@ function onAddAtomicBlock<T extends BlockType>(
 }
 
 function clearAllInlineStyle(editorState: EditorState) {
-  const nowStyles = editorState.getCurrentInlineStyle().toArray();
-  let newState: EditorState = editorState;
-  nowStyles.forEach((style) => {
-    newState = RichUtils.toggleInlineStyle(newState, style);
+  const inlineStyle: string[] = [];
+  const selectedBlocks = getSelectedBlocks(editorState);
+  selectedBlocks.forEach((block) => {
+    block.getCharacterList().forEach((character) => {
+      const styleStr = character.getStyle().toArray();
+      styleStr.forEach((style) => {
+        if (!inlineStyle.includes(style)) {
+          inlineStyle.push(style);
+        }
+      });
+    });
   });
-  return newState;
+  let contentState = editorState.getCurrentContent();
+  inlineStyle.forEach((style) => {
+    contentState = Modifier.removeInlineStyle(
+      contentState,
+      editorState.getSelection(),
+      style
+    );
+  });
+  return EditorState.push(editorState, contentState, "change-inline-style");
 }
 
 function indentIncrease(editorState: EditorState) {
