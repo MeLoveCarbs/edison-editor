@@ -1,12 +1,11 @@
 {
   "name": "edison-editor",
-  "version": "0.1.5",
+  "version": "0.1.10",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "build": "yarn tsc",
-    "pub": "npm run build && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -30,7 +29,8 @@
     "@types/draft-js": "^0.10.44"
   },
   "peerDependencies": {
-    "draft-js": "^0.11.7",
-    "react": "^17.0.1"
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "draft-js": "^0.11.7"
   }
 }

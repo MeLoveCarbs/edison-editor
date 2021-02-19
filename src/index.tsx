@@ -4,7 +4,6 @@ import { styleMap, styleRender } from "./styles";
 import { blockRender } from "./block";
 
 export type { InlineStyleType } from "./styles";
-export { CustomStylePrefix } from "./styles";
 export type {
   BlockType as AtomicBlockType,
   BlockProps as AtomicBlockProps,
