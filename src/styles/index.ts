@@ -5,7 +5,7 @@ const CustomStyle = {
   HIGHLIGHT: "HIGHLIGHT",
 } as const;
 
-const CustomStylePrefix = {
+export const CustomStylePrefix = {
   COLOR: "COLOR_",
   HIGH_LIGHT_COLOR: "HIGH_COLOR_",
   FONT_SIZE: "FONT_SIZE_",
