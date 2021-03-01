@@ -1,10 +1,12 @@
 import {
   EditorState,
+  ContentState,
   ContentBlock,
   AtomicBlockUtils,
   Modifier,
 } from "draft-js";
-import { BlockType, BlockProps } from "../block";
+import htmlToDraft from "html-to-draftjs";
+import { BlockType, BlockProps, nodeMapEntity } from "../block";
 
 function getSelectedBlocks(editorState: EditorState) {
   const selectionState = editorState.getSelection();
@@ -76,7 +78,21 @@ function indentDecrease(editorState: EditorState) {
   return editorState;
 }
 
+function htmlToState(htmlStr: string) {
+  if (!htmlStr) {
+    return EditorState.createEmpty();
+  }
+  const blocksFromHtml = htmlToDraft(htmlStr, nodeMapEntity);
+  const { contentBlocks, entityMap } = blocksFromHtml;
+  const contentState = ContentState.createFromBlockArray(
+    contentBlocks,
+    entityMap
+  );
+  return EditorState.createWithContent(contentState);
+}
+
 export const EdisonUtil = {
+  htmlToState,
   getSelectedBlocks,
   onAddAtomicBlock,
   clearAllInlineStyle,

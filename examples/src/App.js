@@ -1,12 +1,12 @@
 import React, { useState, createRef } from "react";
-import { EditorState, RichUtils, getDefaultKeyBinding } from "draft-js";
+import { RichUtils, getDefaultKeyBinding } from "draft-js";
 import EdisonEditor, { EdisonUtil } from "edison-editor";
 import { FormattingMenu, EditorActionMap } from "./Controls";
 import "./App.css";
 
 function App() {
   const _draftEditorRef = createRef();
-  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+  const [editorState, setEditorState] = useState(EdisonUtil.htmlToState(""));
   const [placeholder] = useState("请编辑此处");
 
   const handleKeyCommand = (command, editorState) => {

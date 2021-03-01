@@ -1,18 +1,25 @@
 import React from "react";
-import { ContentState, ContentBlock } from "draft-js";
+import { ContentState, ContentBlock, RawDraftEntity } from "draft-js";
 import {
   EntityType as ImageEntityType,
   Props as ImageProps,
   RendererFn as ImageRendererFn,
 } from "./image";
+import {
+  EntityType as BlockQuoteEntityType,
+  Props as BlockQuoteProps,
+  RendererFn as BlockQuoteRendererFn,
+} from "./blockquote";
 
 const BlockRendererMap = {
   [ImageEntityType]: ImageRendererFn,
+  [BlockQuoteEntityType]: BlockQuoteRendererFn,
 };
 
 export type BlockType = keyof typeof BlockRendererMap;
 export type BlockProps<T extends BlockType> = {
   [ImageEntityType]: ImageProps;
+  [BlockQuoteEntityType]: BlockQuoteProps;
 }[T];
 
 export function AtomicComponent(props: {
@@ -29,3 +36,25 @@ export function AtomicComponent(props: {
   }
   return null;
 }
+
+export const AtomicNodeMapEntity = {
+  img: (node: HTMLElement) => {
+    const src = node.getAttribute("src");
+    return {
+      type: ImageEntityType,
+      mutability: "IMMUTABLE",
+      data: {
+        src,
+      },
+    } as RawDraftEntity;
+  },
+  blockquote: (node: HTMLElement) => {
+    return {
+      type: "blockquote",
+      mutability: "IMMUTABLE",
+      data: {
+        html: node.innerHTML,
+      },
+    } as RawDraftEntity;
+  },
+};
