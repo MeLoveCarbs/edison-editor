@@ -50,7 +50,7 @@ export const AtomicNodeMapEntity = {
   },
   blockquote: (node: HTMLElement) => {
     return {
-      type: "blockquote",
+      type: BlockQuoteEntityType,
       mutability: "IMMUTABLE",
       data: {
         html: node.innerHTML,

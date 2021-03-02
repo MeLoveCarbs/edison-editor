@@ -6,9 +6,14 @@
 }
 
 .edisonEditorContainer {
-  width: 500px;
+  width: 100%;
   min-height: 200px;
   border: 2px solid #999;
+}
+
+.edisonEditorContainer figure {
+  margin: 0;
+  padding: 0;
 }
 
 .controls-buttons {
