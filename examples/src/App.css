@@ -16,6 +16,13 @@
   padding: 0;
 }
 
+.edisonEditorContainer blockquote:before,
+.edisonEditorContainer blockquote:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
 .controls-buttons {
   height: 30px;
   width: 100%;

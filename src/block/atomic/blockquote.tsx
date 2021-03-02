@@ -10,6 +10,7 @@ export const RendererFn: React.FunctionComponent<Props> = ({ html }: Props) => {
         borderLeft: "1px solid rgb(204,204,204)",
         paddingLeft: "1ex",
         whiteSpace: "normal",
+        wordBreak: "break-all",
       }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
