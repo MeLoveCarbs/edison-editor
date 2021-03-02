@@ -9,7 +9,7 @@ export const RendererFn: React.FunctionComponent<Props> = ({ html }: Props) => {
         margin: "0px 0px 0px 0.8ex",
         borderLeft: "1px solid rgb(204,204,204)",
         paddingLeft: "1ex",
-        overflow: "hidden",
+        whiteSpace: "normal",
       }}
       dangerouslySetInnerHTML={{ __html: html }}
     />
