@@ -38,6 +38,29 @@ function getSelectedBlocks(editorState: EditorState) {
   return selectedBlocks;
 }
 
+function modifyBlockForContentState(
+  editorState: EditorState,
+  blockMapFunc: (block: ContentBlock) => ContentBlock
+) {
+  const selectionState = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  const startKey = selectionState.getStartKey();
+  const endKey = selectionState.getEndKey();
+  const blockMap = contentState.getBlockMap();
+  const newBlocks = blockMap
+    .toSeq()
+    .skipUntil((_, k) => k === startKey)
+    .takeUntil((_, k) => k === endKey)
+    .concat([[endKey, blockMap.get(endKey)]])
+    .map(blockMapFunc);
+
+  return contentState.merge({
+    blockMap: blockMap.merge(newBlocks),
+    selectionBefore: selectionState,
+    selectionAfter: selectionState,
+  }) as ContentState;
+}
+
 function onAddAtomicBlock<T extends BlockType>(
   entityType: T,
   params: BlockProps<T>,
@@ -85,21 +108,17 @@ function changeBlocksDepth(
   adjustment: number,
   maxDepth: number
 ) {
-  const selectionState = editorState.getSelection();
-  const contentState = editorState.getCurrentContent();
-  const startKey = selectionState.getStartKey();
-  const startBlock = contentState.getBlockForKey(startKey);
-  const startIndent = startBlock.getData().get(BlockDataKeyMap.textIndent) || 0;
-  const newData = Math.min(Math.max(startIndent + adjustment, 0), maxDepth);
-  const newContent = Modifier.setBlockData(
-    contentState,
-    selectionState,
-    convertObjectToImmutableMap({
-      [BlockDataKeyMap.textIndent]: newData,
-    })
+  const changeBlocksDepthMap = (block: ContentBlock) => {
+    const oldIndent = block.getData().get(BlockDataKeyMap.textIndent) || 0;
+    const newIndent = Math.min(Math.max(oldIndent + adjustment, 0), maxDepth);
+    const newData = { [BlockDataKeyMap.textIndent]: newIndent };
+    return block.merge({ data: newData }) as ContentBlock;
+  };
+  const newContent = modifyBlockForContentState(
+    editorState,
+    changeBlocksDepthMap
   );
-  const allblock = getSelectedBlocks(editorState);
-  allblock.forEach((b) => console.log(b.getType()));
+
   return EditorState.createWithContent(newContent);
 }
 
