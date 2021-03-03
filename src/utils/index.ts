@@ -6,7 +6,17 @@ import {
   Modifier,
 } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
-import { BlockType, BlockProps, nodeMapEntity } from "../block";
+import { BlockType, BlockProps, nodeMapEntity } from "../block-render";
+import { BlockDataKeyMap } from "../block-style";
+
+const MaxIndentDeep = 6;
+
+function convertObjectToImmutableMap(raw: { [key: string]: any }) {
+  const tempContentBlock = new ContentBlock();
+  const blankImmutableMap = tempContentBlock.getData();
+  const updatedImmutableMap = blankImmutableMap.merge(raw);
+  return updatedImmutableMap;
+}
 
 function getSelectedBlocks(editorState: EditorState) {
   const selectionState = editorState.getSelection();
@@ -70,12 +80,35 @@ function clearAllInlineStyle(editorState: EditorState) {
   return EditorState.push(editorState, contentState, "change-inline-style");
 }
 
+function changeBlocksDepth(
+  editorState: EditorState,
+  adjustment: number,
+  maxDepth: number
+) {
+  const selectionState = editorState.getSelection();
+  const contentState = editorState.getCurrentContent();
+  const startKey = selectionState.getStartKey();
+  const startBlock = contentState.getBlockForKey(startKey);
+  const startIndent = startBlock.getData().get(BlockDataKeyMap.textIndent) || 0;
+  const newData = Math.min(Math.max(startIndent + adjustment, 0), maxDepth);
+  const newContent = Modifier.setBlockData(
+    contentState,
+    selectionState,
+    convertObjectToImmutableMap({
+      [BlockDataKeyMap.textIndent]: newData,
+    })
+  );
+  const allblock = getSelectedBlocks(editorState);
+  allblock.forEach((b) => console.log(b.getType()));
+  return EditorState.createWithContent(newContent);
+}
+
 function indentIncrease(editorState: EditorState) {
-  return editorState;
+  return changeBlocksDepth(editorState, 1, MaxIndentDeep);
 }
 
 function indentDecrease(editorState: EditorState) {
-  return editorState;
+  return changeBlocksDepth(editorState, -1, MaxIndentDeep);
 }
 
 function htmlToState(htmlStr: string) {

@@ -1,0 +1,45 @@
+figure {
+  margin: 0;
+  padding: 0;
+}
+
+blockquote:before,
+blockquote:after {
+  content: "";
+  display: block;
+  clear: both;
+}
+
+.edison-indent-1 {
+  padding-left: 10px;
+}
+
+.edison-indent-2 {
+  padding-left: 20px;
+}
+
+.edison-indent-3 {
+  padding-left: 30px;
+}
+
+.edison-indent-4 {
+  padding-left: 40px;
+}
+
+.edison-indent-5 {
+  padding-left: 50px;
+}
+
+.edison-indent-6 {
+  padding-left: 60px;
+}
+
+ul li,
+ol li {
+  list-style-position: inside;
+}
+
+ul li > div,
+ol li > div {
+  display: inline-block;
+}

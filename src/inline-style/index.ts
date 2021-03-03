@@ -17,11 +17,11 @@ export type InlineStyleType =
   | typeof CustomStyle[keyof typeof CustomStyle]
   | `${typeof CustomStylePrefix[keyof typeof CustomStylePrefix]}${string}`;
 
-export const styleMap = {
+export const inlineStyleMap = {
   [CustomStyle.HIGHLIGHT]: highLight,
 } as const;
 
-export const styleRender = (style: DraftInlineStyle) => {
+export const inlineStyleRender = (style: DraftInlineStyle) => {
   const styleNames = style.toJS();
   return styleNames.reduce((styles: React.CSSProperties, styleName: string) => {
     if (styleName.startsWith(CustomStylePrefix.COLOR)) {
