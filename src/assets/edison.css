@@ -42,4 +42,5 @@ ol li {
 ul li > div,
 ol li > div {
   display: inline-block;
+  vertical-align: top;
 }
