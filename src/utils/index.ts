@@ -40,7 +40,8 @@ function getSelectedBlocks(editorState: EditorState) {
 
 function modifyBlockForContentState(
   editorState: EditorState,
-  blockMapFunc: (block: ContentBlock) => ContentBlock
+  blockMapFunc: (block: ContentBlock) => ContentBlock,
+  selected = false
 ) {
   const selectionState = editorState.getSelection();
   const contentState = editorState.getCurrentContent();
@@ -54,11 +55,21 @@ function modifyBlockForContentState(
     .concat([[endKey, blockMap.get(endKey)]])
     .map(blockMapFunc);
 
-  return contentState.merge({
+  const newContent = contentState.merge({
     blockMap: blockMap.merge(newBlocks),
     selectionBefore: selectionState,
     selectionAfter: selectionState,
   }) as ContentState;
+
+  const newState = EditorState.createWithContent(newContent);
+  if (!selected) {
+    return newState;
+  }
+  const newStateWithSelect = EditorState.forceSelection(
+    newState,
+    selectionState
+  );
+  return newStateWithSelect;
 }
 
 function onAddAtomicBlock<T extends BlockType>(
@@ -114,12 +125,7 @@ function changeBlocksDepth(
     const newData = { [BlockDataKeyMap.textIndent]: newIndent };
     return block.merge({ data: newData }) as ContentBlock;
   };
-  const newContent = modifyBlockForContentState(
-    editorState,
-    changeBlocksDepthMap
-  );
-
-  return EditorState.createWithContent(newContent);
+  return modifyBlockForContentState(editorState, changeBlocksDepthMap, true);
 }
 
 function indentIncrease(editorState: EditorState) {
