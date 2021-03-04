@@ -136,6 +136,22 @@ function indentDecrease(editorState: EditorState) {
   return changeBlocksDepth(editorState, -1, MaxIndentDeep);
 }
 
+function isInIndentBlockBeginning(editorState: EditorState) {
+  const selection = editorState.getSelection();
+  const offset = selection.getAnchorOffset();
+  if (!selection.isCollapsed() || offset != 0) {
+    return false;
+  }
+  const key = selection.getAnchorKey();
+  const content = editorState.getCurrentContent();
+  const block = content.getBlockForKey(key);
+  const oldIndent = block.getData().get(BlockDataKeyMap.textIndent) || 0;
+  if (oldIndent > 0) {
+    return true;
+  }
+  return false;
+}
+
 function htmlToState(htmlStr: string) {
   if (!htmlStr) {
     return EditorState.createEmpty();
@@ -156,4 +172,5 @@ export const EdisonUtil = {
   clearAllInlineStyle,
   indentIncrease,
   indentDecrease,
+  isInIndentBlockBeginning,
 };

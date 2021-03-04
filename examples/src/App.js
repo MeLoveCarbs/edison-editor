@@ -9,7 +9,24 @@ function App() {
   const [editorState, setEditorState] = useState(EdisonUtil.htmlToState(""));
   const [placeholder] = useState("请编辑此处");
 
-  const handleKeyCommand = (command, editorState) => {
+  const onTab = (shiftKey) => {
+    if (shiftKey) {
+      setEditorState(EdisonUtil.indentDecrease(editorState));
+    } else {
+      setEditorState(EdisonUtil.indentIncrease(editorState));
+    }
+    return true;
+  };
+
+  const onBackSpace = () => {
+    if (EdisonUtil.isInIndentBlockBeginning(editorState)) {
+      setEditorState(EdisonUtil.indentDecrease(editorState));
+      return true;
+    }
+    return onNormalCommand("backspace");
+  };
+
+  const onNormalCommand = (command) => {
     const newState = RichUtils.handleKeyCommand(editorState, command);
     if (newState) {
       setEditorState(newState);
@@ -18,17 +35,28 @@ function App() {
     return false;
   };
 
+  const handleKeyCommand = (command, editorState) => {
+    if (!command) {
+      return false;
+    }
+    if (command === "tab") {
+      return onTab();
+    }
+    if (command === "tab-shift") {
+      return onTab(true);
+    }
+    if (command === "backspace") {
+      return onBackSpace();
+    }
+
+    return onNormalCommand(command);
+  };
+
   const mapKeyToEditorCommand = (e) => {
     if (e.keyCode === 9) {
-      // TAB
-      if (e.shiftKey) {
-        setEditorState(EdisonUtil.indentDecrease(editorState));
-      } else {
-        setEditorState(EdisonUtil.indentIncrease(editorState));
-      }
       e.stopPropagation();
       e.preventDefault();
-      return;
+      return e.shiftKey ? "tab-shift" : "tab";
     }
     return getDefaultKeyBinding(e);
   };
