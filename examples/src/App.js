@@ -19,20 +19,18 @@ function App() {
   };
 
   const mapKeyToEditorCommand = (e) => {
-    switch (e.keyCode) {
-      case 9: // TAB
-        const newEditorState = RichUtils.onTab(
-          e,
-          editorState,
-          4 /* maxDepth */
-        );
-        if (newEditorState !== editorState) {
-          setEditorState(newEditorState);
-        }
-        return;
-      default:
-        return getDefaultKeyBinding(e);
+    if (e.keyCode === 9) {
+      // TAB
+      if (e.shiftKey) {
+        setEditorState(EdisonUtil.indentDecrease(editorState));
+      } else {
+        setEditorState(EdisonUtil.indentIncrease(editorState));
+      }
+      e.stopPropagation();
+      e.preventDefault();
+      return;
     }
+    return getDefaultKeyBinding(e);
   };
 
   const onDraftBaseAction = (option) => {
