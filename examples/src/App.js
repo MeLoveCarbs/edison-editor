@@ -88,6 +88,10 @@ function App() {
     }
   };
 
+  console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+  console.log(EdisonUtil.stateToHTML(editorState));
+  console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+
   return (
     <>
       <div className="App">

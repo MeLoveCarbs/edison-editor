@@ -4,10 +4,17 @@ import {
   ContentBlock,
   AtomicBlockUtils,
   Modifier,
+  DraftInlineStyle,
 } from "draft-js";
 import htmlToDraft from "html-to-draftjs";
+import { stateToHTML } from "draft-js-export-html";
+import { inlineStyleMap, inlineStyleRender } from "../inline-style";
 import { BlockType, BlockProps, nodeMapEntity } from "../block-render";
-import { BlockDataKeyMap } from "../block-style";
+import {
+  BlockDataKeyMap,
+  blockStyleRender,
+  classMapStyle,
+} from "../block-style";
 
 const MaxIndentDeep = 6;
 
@@ -165,8 +172,35 @@ function htmlToState(htmlStr: string) {
   return EditorState.createWithContent(contentState);
 }
 
+function exportHtml(state: EditorState) {
+  const inlineStyles: { [styleName: string]: any } = {};
+  Object.keys(inlineStyleMap).forEach((key) => {
+    inlineStyles[key] = {
+      style: inlineStyleMap[key as keyof typeof inlineStyleMap],
+    };
+  });
+
+  const options: any = {
+    inlineStyles,
+    inlineStyleFn: (style: DraftInlineStyle) => {
+      return {
+        style: inlineStyleRender(style),
+      };
+    },
+    blockStyleFn: (block: ContentBlock) => {
+      const className = blockStyleRender(block);
+      return {
+        style: classMapStyle(className),
+      };
+    },
+  };
+
+  return stateToHTML(state.getCurrentContent(), options);
+}
+
 export const EdisonUtil = {
   htmlToState,
+  stateToHTML: exportHtml,
   getSelectedBlocks,
   onAddAtomicBlock,
   clearAllInlineStyle,
