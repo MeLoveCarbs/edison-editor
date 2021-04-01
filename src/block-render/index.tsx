@@ -1,5 +1,9 @@
 import { ContentBlock } from "draft-js";
-import { AtomicComponent, AtomicNodeMapEntity } from "./atomic";
+import {
+  AtomicComponent,
+  AtomicNodeMapEntity,
+  AtomicEntityMapNode,
+} from "./atomic";
 
 export type { BlockType, BlockProps } from "./atomic";
 
@@ -20,3 +24,5 @@ export function nodeMapEntity(nodeName: string, node: HTMLElement) {
     return AtomicNodeMapEntity.img(node);
   }
 }
+
+export const entityMapNode = AtomicEntityMapNode;

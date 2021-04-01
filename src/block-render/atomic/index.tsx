@@ -1,5 +1,10 @@
 import React from "react";
-import { ContentState, ContentBlock, RawDraftEntity } from "draft-js";
+import {
+  ContentState,
+  ContentBlock,
+  EntityInstance,
+  RawDraftEntity,
+} from "draft-js";
 import {
   EntityType as ImageEntityType,
   Props as ImageProps,
@@ -57,4 +62,32 @@ export const AtomicNodeMapEntity = {
       },
     } as RawDraftEntity;
   },
+};
+
+export const AtomicEntityMapNode = (entity: EntityInstance) => {
+  const entityType = entity.getType();
+  const data = entity.getData();
+  if (entityType === ImageEntityType) {
+    return {
+      element: "img",
+      attributes: {
+        src: data.src,
+      },
+    };
+  }
+  if (entityType === BlockQuoteEntityType) {
+    return {
+      element: "blockquote",
+      attributes: {
+        innerHTML: data.html,
+      },
+      style: {
+        margin: "0px 0px 0px 0.8ex",
+        borderLeft: "1px solid rgb(204,204,204)",
+        paddingLeft: "1ex",
+        whiteSpace: "normal",
+        wordBreak: "break-all",
+      } as const,
+    };
+  }
 };

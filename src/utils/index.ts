@@ -9,7 +9,12 @@ import {
 import htmlToDraft from "html-to-draftjs";
 import { stateToHTML } from "draft-js-export-html";
 import { inlineStyleMap, inlineStyleRender } from "../inline-style";
-import { BlockType, BlockProps, nodeMapEntity } from "../block-render";
+import {
+  BlockType,
+  BlockProps,
+  nodeMapEntity,
+  entityMapNode,
+} from "../block-render";
 import {
   BlockDataKeyMap,
   blockStyleRender,
@@ -17,6 +22,7 @@ import {
 } from "../block-style";
 
 const MaxIndentDeep = 6;
+const commonStyle = `blockquote:before,blockquote:after{content:"";display:block;clear:both}`;
 
 function convertObjectToImmutableMap(raw: { [key: string]: any }) {
   const tempContentBlock = new ContentBlock();
@@ -180,7 +186,7 @@ function exportHtml(state: EditorState) {
     };
   });
 
-  const options: any = {
+  const options = {
     inlineStyles,
     inlineStyleFn: (style: DraftInlineStyle) => {
       return {
@@ -193,9 +199,21 @@ function exportHtml(state: EditorState) {
         style: classMapStyle(className),
       };
     },
+    entityStyleFn: entityMapNode,
   };
 
-  return stateToHTML(state.getCurrentContent(), options);
+  const formatStr = stateToHTML(state.getCurrentContent(), options);
+  const boxNode = document.createElement("div");
+  boxNode.innerHTML = formatStr;
+  const allBlockquote = boxNode.querySelectorAll("blockquote");
+  allBlockquote.forEach((el) => {
+    const innerHTML = el.getAttribute("innerHTML");
+    if (innerHTML) {
+      el.innerHTML = innerHTML;
+      el.removeAttribute("innerHTML");
+    }
+  });
+  return `${`<style>${commonStyle}</style>`}${boxNode.innerHTML}`;
 }
 
 export const EdisonUtil = {
