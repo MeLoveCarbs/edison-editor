@@ -213,7 +213,8 @@ function exportHtml(state: EditorState) {
       el.removeAttribute("innerHTML");
     }
   });
-  return `${`<style>${commonStyle}</style>`}${boxNode.innerHTML}`;
+  const html = `${`<style>${commonStyle}</style>`}${boxNode.innerHTML}`;
+  return html.replace(/<figure/g, "<div").replace(/<\/figure/g, "</div");
 }
 
 export const EdisonUtil = {
