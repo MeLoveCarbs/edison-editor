@@ -225,8 +225,9 @@ function exportHtml(state: EditorState) {
       el.removeAttribute("innerHTML");
     }
   });
-  const html = `${`<style>${commonStyle}</style>`}${boxNode.innerHTML}`;
-  return html.replace(/<figure/g, "<div").replace(/<\/figure/g, "</div");
+  return boxNode.innerHTML
+    .replace(/<figure/g, "<div")
+    .replace(/<\/figure/g, "</div");
 }
 
 export const EdisonUtil = {
