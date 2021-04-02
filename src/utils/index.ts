@@ -169,13 +169,17 @@ function htmlToState(htmlStr: string) {
   if (!htmlStr) {
     return EditorState.createEmpty();
   }
-  const blocksFromHtml = htmlToDraft(htmlStr, nodeMapEntity);
-  const { contentBlocks, entityMap } = blocksFromHtml;
-  const contentState = ContentState.createFromBlockArray(
-    contentBlocks,
-    entityMap
-  );
-  return EditorState.createWithContent(contentState);
+  try {
+    const blocksFromHtml = htmlToDraft(htmlStr, nodeMapEntity);
+    const { contentBlocks, entityMap } = blocksFromHtml;
+    const contentState = ContentState.createFromBlockArray(
+      contentBlocks,
+      entityMap
+    );
+    return EditorState.createWithContent(contentState);
+  } catch (err) {
+    return EditorState.createEmpty();
+  }
 }
 
 function exportHtml(state: EditorState) {
@@ -206,7 +210,15 @@ function exportHtml(state: EditorState) {
   const boxNode = document.createElement("div");
   boxNode.innerHTML = formatStr;
   const allBlockquote = boxNode.querySelectorAll("blockquote");
+  const allTable = boxNode.querySelectorAll("table");
   allBlockquote.forEach((el) => {
+    const innerHTML = el.getAttribute("innerHTML");
+    if (innerHTML) {
+      el.innerHTML = innerHTML;
+      el.removeAttribute("innerHTML");
+    }
+  });
+  allTable.forEach((el) => {
     const innerHTML = el.getAttribute("innerHTML");
     if (innerHTML) {
       el.innerHTML = innerHTML;

@@ -22,6 +22,8 @@ export function nodeMapEntity(nodeName: string, node: HTMLElement) {
     return AtomicNodeMapEntity.blockquote(node);
   } else if (nodeName === "img") {
     return AtomicNodeMapEntity.img(node);
+  } else if (nodeName === "table") {
+    return AtomicNodeMapEntity.table(node);
   } else if (nodeName === "head") {
     return HeadNodeMapEntity.head(node);
   } else if (nodeName === "style") {

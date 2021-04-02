@@ -15,16 +15,23 @@ import {
   Props as BlockQuoteProps,
   RendererFn as BlockQuoteRendererFn,
 } from "./blockquote";
+import {
+  EntityType as TableEntityType,
+  Props as TableProps,
+  RendererFn as TableRendererFn,
+} from "./table";
 
 const BlockRendererMap = {
   [ImageEntityType]: ImageRendererFn,
   [BlockQuoteEntityType]: BlockQuoteRendererFn,
+  [TableEntityType]: TableRendererFn,
 };
 
 export type BlockType = keyof typeof BlockRendererMap;
 export type BlockProps<T extends BlockType> = {
   [ImageEntityType]: ImageProps;
   [BlockQuoteEntityType]: BlockQuoteProps;
+  [TableEntityType]: TableProps;
 }[T];
 
 export function AtomicComponent(props: {
@@ -62,6 +69,15 @@ export const AtomicNodeMapEntity = {
       },
     } as RawDraftEntity;
   },
+  table: (node: HTMLElement) => {
+    return {
+      type: TableEntityType,
+      mutability: "IMMUTABLE",
+      data: {
+        html: node.innerHTML,
+      },
+    } as RawDraftEntity;
+  },
 };
 
 export const AtomicEntityMapNode = (entity: EntityInstance) => {
@@ -87,6 +103,19 @@ export const AtomicEntityMapNode = (entity: EntityInstance) => {
         paddingLeft: "1ex",
         whiteSpace: "normal",
         wordBreak: "break-all",
+      } as const,
+    };
+  }
+  if (entityType === TableEntityType) {
+    return {
+      element: "table",
+      attributes: {
+        innerHTML: data.html,
+      },
+      style: {
+        whiteSpace: "normal",
+        wordBreak: "break-all",
+        maxWidth: "100%",
       } as const,
     };
   }
