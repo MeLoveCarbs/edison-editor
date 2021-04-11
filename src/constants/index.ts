@@ -16,15 +16,6 @@ export const EntityTypeMap = {
   LinkEntityType: "LINK",
 } as const;
 
-export const EntityMutabilityMap = {
-  [EntityTypeMap.ImageEntityType]: "IMMUTABLE",
-  [EntityTypeMap.TableEntityType]: "IMMUTABLE",
-  [EntityTypeMap.BlockQuoteEntityType]: "IMMUTABLE",
-  [EntityTypeMap.LinkEntityType]: "MUTABLE",
-} as const;
-
-export type EntityTypes = typeof EntityTypeMap[keyof typeof EntityTypeMap];
-
 export type ImageProps = {
   src?: string;
   alt?: string;
@@ -35,11 +26,15 @@ export type TableProps = { html: string };
 export type BlockQuoteProps = { html: string };
 export type LinkProps = { url: string; text: string };
 
-export type EntityProps<T extends EntityTypes> = {
+export type AtomicEntityTypes =
+  | typeof EntityTypeMap.ImageEntityType
+  | typeof EntityTypeMap.BlockQuoteEntityType
+  | typeof EntityTypeMap.TableEntityType;
+
+export type AtomicEntityProps<T extends AtomicEntityTypes> = {
   [EntityTypeMap.ImageEntityType]: ImageProps;
   [EntityTypeMap.TableEntityType]: TableProps;
   [EntityTypeMap.BlockQuoteEntityType]: BlockQuoteProps;
-  [EntityTypeMap.LinkEntityType]: LinkProps;
 }[T];
 
 export const BlockDataKeyMap = {

@@ -10,7 +10,11 @@ export type InlineStyleType =
   | DraftInlineStyleType
   | `${typeof CustomStylePrefix[keyof typeof CustomStylePrefix]}${string}`;
 
-export type { EntityTypes, EntityProps } from "./constants";
+export type {
+  AtomicEntityTypes,
+  AtomicEntityProps,
+  LinkProps,
+} from "./constants";
 
 export * from "./utils";
 

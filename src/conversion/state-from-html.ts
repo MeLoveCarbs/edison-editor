@@ -5,8 +5,8 @@ import {
   CompositeDecorator,
 } from "draft-js";
 import htmlToState from "html-to-draftjs";
-import { EntityTypeMap, EntityProps } from "../constants";
-import { RendererFn as Link } from "../block/other/link";
+import { EntityTypeMap, AtomicEntityProps } from "../constants";
+import { RendererFn as Link } from "../block/normal/link";
 
 function findLinkEntities(
   block: ContentBlock,
@@ -32,7 +32,7 @@ const decorator = new CompositeDecorator([
 
 function customChunkRenderer(nodeName: string, node: HTMLElement) {
   if (nodeName === "table") {
-    const data: EntityProps<typeof EntityTypeMap.TableEntityType> = {
+    const data: AtomicEntityProps<typeof EntityTypeMap.TableEntityType> = {
       html: node.innerHTML,
     };
     return {
@@ -42,7 +42,7 @@ function customChunkRenderer(nodeName: string, node: HTMLElement) {
     } as const;
   }
   if (nodeName === "blockquote") {
-    const data: EntityProps<typeof EntityTypeMap.BlockQuoteEntityType> = {
+    const data: AtomicEntityProps<typeof EntityTypeMap.BlockQuoteEntityType> = {
       html: node.innerHTML,
     };
     return {
@@ -52,7 +52,7 @@ function customChunkRenderer(nodeName: string, node: HTMLElement) {
     } as const;
   }
   if (nodeName === "img") {
-    const data: EntityProps<typeof EntityTypeMap.ImageEntityType> = {
+    const data: AtomicEntityProps<typeof EntityTypeMap.ImageEntityType> = {
       src: node.getAttribute("src"),
       alt: node.getAttribute("alt"),
       height: node.getAttribute("height"),
@@ -68,7 +68,7 @@ function customChunkRenderer(nodeName: string, node: HTMLElement) {
 
 export function stateFromHTML(htmlStr: string) {
   if (!htmlStr) {
-    return EditorState.createEmpty();
+    return EditorState.createEmpty(decorator);
   }
   try {
     const { contentBlocks, entityMap } = htmlToState(
@@ -81,6 +81,6 @@ export function stateFromHTML(htmlStr: string) {
     );
     return EditorState.createWithContent(contentState, decorator);
   } catch (err) {
-    return EditorState.createEmpty();
+    return EditorState.createEmpty(decorator);
   }
 }

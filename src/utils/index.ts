@@ -4,12 +4,14 @@ import {
   ContentBlock,
   AtomicBlockUtils,
   Modifier,
+  RichUtils,
 } from "draft-js";
 import {
   BlockDataKeyMap,
-  EntityTypes,
-  EntityMutabilityMap,
-  EntityProps,
+  EntityTypeMap,
+  AtomicEntityTypes,
+  AtomicEntityProps,
+  LinkProps,
 } from "../constants";
 import { stateFromHTML } from "../conversion/state-from-html";
 import { stateToHTML } from "../conversion/state-to-html";
@@ -77,15 +79,15 @@ function modifyBlockForContentState(
   return newStateWithSelect;
 }
 
-function onAddAtomicBlock<T extends EntityTypes>(
+function onAddAtomicBlock<T extends AtomicEntityTypes>(
   entityType: T,
-  params: EntityProps<T>,
+  params: AtomicEntityProps<T>,
   editorState: EditorState
 ) {
   const contentState = editorState.getCurrentContent();
   const contentStateWithEntity = contentState.createEntity(
     entityType,
-    EntityMutabilityMap[entityType],
+    "IMMUTABLE",
     params
   );
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
@@ -93,6 +95,24 @@ function onAddAtomicBlock<T extends EntityTypes>(
     currentContent: contentStateWithEntity,
   });
   return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
+}
+
+function onAddLink(params: LinkProps, editorState: EditorState) {
+  const contentState = editorState.getCurrentContent();
+  const contentStateWithEntity = contentState.createEntity(
+    EntityTypeMap.LinkEntityType,
+    "MUTABLE",
+    params
+  );
+  const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+  const newEditorState = EditorState.set(editorState, {
+    currentContent: contentStateWithEntity,
+  });
+  return RichUtils.toggleLink(
+    newEditorState,
+    newEditorState.getSelection(),
+    entityKey
+  );
 }
 
 function clearAllInlineStyle(editorState: EditorState) {
@@ -161,6 +181,7 @@ export const EdisonUtil = {
   stateFromHTML,
   stateToHTML,
   getSelectedBlocks,
+  onAddLink,
   onAddAtomicBlock,
   clearAllInlineStyle,
   indentIncrease,
