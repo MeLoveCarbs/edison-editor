@@ -10,6 +10,24 @@ blockquote:after {
   clear: both;
 }
 
+blockquote {
+  margin: 0px 0px 0px 0.8ex;
+  border-left: 1px solid rgb(204, 204, 204);
+  padding-left: 1ex;
+  white-space: normal;
+  word-break: break-all;
+}
+
+table {
+  white-space: normal;
+  word-break: break-all;
+  max-width: 100%;
+}
+
+a {
+  color: #0097ff;
+}
+
 .edison-indent-1 {
   margin-left: 2em;
 }

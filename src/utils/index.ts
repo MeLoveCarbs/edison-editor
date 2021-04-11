@@ -4,27 +4,14 @@ import {
   ContentBlock,
   AtomicBlockUtils,
   Modifier,
-  DraftInlineStyle,
 } from "draft-js";
-import htmlToDraft from "html-to-draftjs";
-import { stateToHTML } from "draft-js-export-html";
-import { inlineStyleMap, inlineStyleRender } from "../inline-style";
-import {
-  BlockType,
-  BlockProps,
-  nodeMapEntity,
-  entityMapNode,
-} from "../block-render";
-import {
-  BlockDataKeyMap,
-  blockStyleRender,
-  classMapStyle,
-} from "../block-style";
+import { BlockDataKeyMap, EntityTypes, EntityProps } from "../constants";
+import { stateFromHTML } from "../conversion/state-from-html";
+import { stateToHTML } from "../conversion/state-to-html";
 
 const MaxIndentDeep = 6;
-const commonStyle = `blockquote:before,blockquote:after{content:"";display:block;clear:both}`;
 
-function convertObjectToImmutableMap(raw: { [key: string]: any }) {
+export function convertObjectToImmutableMap(raw: { [key: string]: any }) {
   const tempContentBlock = new ContentBlock();
   const blankImmutableMap = tempContentBlock.getData();
   const updatedImmutableMap = blankImmutableMap.merge(raw);
@@ -85,9 +72,9 @@ function modifyBlockForContentState(
   return newStateWithSelect;
 }
 
-function onAddAtomicBlock<T extends BlockType>(
+function onAddAtomicBlock<T extends EntityTypes>(
   entityType: T,
-  params: BlockProps<T>,
+  params: EntityProps<T>,
   editorState: EditorState
 ) {
   const contentState = editorState.getCurrentContent();
@@ -165,74 +152,9 @@ function isInIndentBlockBeginning(editorState: EditorState) {
   return false;
 }
 
-function htmlToState(htmlStr: string) {
-  if (!htmlStr) {
-    return EditorState.createEmpty();
-  }
-  try {
-    const blocksFromHtml = htmlToDraft(htmlStr, nodeMapEntity);
-    const { contentBlocks, entityMap } = blocksFromHtml;
-    const contentState = ContentState.createFromBlockArray(
-      contentBlocks,
-      entityMap
-    );
-    return EditorState.createWithContent(contentState);
-  } catch (err) {
-    return EditorState.createEmpty();
-  }
-}
-
-function exportHtml(state: EditorState) {
-  const inlineStyles: { [styleName: string]: any } = {};
-  Object.keys(inlineStyleMap).forEach((key) => {
-    inlineStyles[key] = {
-      style: inlineStyleMap[key as keyof typeof inlineStyleMap],
-    };
-  });
-
-  const options = {
-    inlineStyles,
-    inlineStyleFn: (style: DraftInlineStyle) => {
-      return {
-        style: inlineStyleRender(style),
-      };
-    },
-    blockStyleFn: (block: ContentBlock) => {
-      const className = blockStyleRender(block);
-      return {
-        style: classMapStyle(className),
-      };
-    },
-    entityStyleFn: entityMapNode,
-  };
-
-  const formatStr = stateToHTML(state.getCurrentContent(), options);
-  const boxNode = document.createElement("div");
-  boxNode.innerHTML = formatStr;
-  const allBlockquote = boxNode.querySelectorAll("blockquote");
-  const allTable = boxNode.querySelectorAll("table");
-  allBlockquote.forEach((el) => {
-    const innerHTML = el.getAttribute("innerHTML");
-    if (innerHTML) {
-      el.innerHTML = innerHTML;
-      el.removeAttribute("innerHTML");
-    }
-  });
-  allTable.forEach((el) => {
-    const innerHTML = el.getAttribute("innerHTML");
-    if (innerHTML) {
-      el.innerHTML = innerHTML;
-      el.removeAttribute("innerHTML");
-    }
-  });
-  return boxNode.innerHTML
-    .replace(/<figure/g, "<div")
-    .replace(/<\/figure/g, "</div");
-}
-
 export const EdisonUtil = {
-  htmlToState,
-  stateToHTML: exportHtml,
+  stateFromHTML,
+  stateToHTML,
   getSelectedBlocks,
   onAddAtomicBlock,
   clearAllInlineStyle,

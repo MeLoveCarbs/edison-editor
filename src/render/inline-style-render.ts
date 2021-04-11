@@ -1,45 +1,29 @@
-import { DraftInlineStyle, DraftInlineStyleType } from "draft-js";
-import { highLight } from "./custom-styles";
+import { DraftInlineStyle } from "draft-js";
+import { CustomStylePrefix } from "../constants";
 
-const CustomStyle = {
-  HIGHLIGHT: "HIGHLIGHT",
-} as const;
-
-const CustomStylePrefix = {
-  COLOR: "COLOR_",
-  HIGH_LIGHT_COLOR: "HIGH_COLOR_",
-  FONT_SIZE: "FONT_SIZE_",
-  FONT_FAMILY: "FONT_FAMILY_",
-} as const;
-
-export type InlineStyleType =
-  | DraftInlineStyleType
-  | typeof CustomStyle[keyof typeof CustomStyle]
-  | `${typeof CustomStylePrefix[keyof typeof CustomStylePrefix]}${string}`;
-
-export const inlineStyleMap = {
-  [CustomStyle.HIGHLIGHT]: highLight,
-} as const;
-
-export const inlineStyleRender = (style: DraftInlineStyle) => {
+export default function inlineStyleRender(style: DraftInlineStyle) {
   const styleNames = style.toJS();
   return styleNames.reduce((styles: React.CSSProperties, styleName: string) => {
     if (styleName.startsWith(CustomStylePrefix.COLOR)) {
       styles.color = styleName.split(CustomStylePrefix.COLOR)[1];
+      return styles;
     }
     if (styleName.startsWith(CustomStylePrefix.HIGH_LIGHT_COLOR)) {
       styles.background = styleName.split(
         CustomStylePrefix.HIGH_LIGHT_COLOR
       )[1];
+      return styles;
     }
     if (styleName.startsWith(CustomStylePrefix.FONT_SIZE)) {
       styles.fontSize = `${styleName.split(CustomStylePrefix.FONT_SIZE)[1]}px`;
+      return styles;
     }
     if (styleName.startsWith(CustomStylePrefix.FONT_FAMILY)) {
       styles.fontFamily = `${
         styleName.split(CustomStylePrefix.FONT_FAMILY)[1]
       }`;
+      return styles;
     }
     return styles;
   }, {});
-};
+}

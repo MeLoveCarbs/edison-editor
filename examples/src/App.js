@@ -1,12 +1,12 @@
 import React, { useState, createRef } from "react";
-import { RichUtils, getDefaultKeyBinding } from "draft-js";
+import { RichUtils, getDefaultKeyBinding, convertToRaw } from "draft-js";
 import EdisonEditor, { EdisonUtil } from "edison-editor";
 import { FormattingMenu, EditorActionMap } from "./Controls";
 import "./App.css";
 
 function App() {
   const _draftEditorRef = createRef();
-  const [editorState, setEditorState] = useState(EdisonUtil.htmlToState(""));
+  const [editorState, setEditorState] = useState(EdisonUtil.stateFromHTML(``));
   const [placeholder] = useState("请编辑此处");
 
   const onTab = (shiftKey) => {
@@ -90,6 +90,7 @@ function App() {
 
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   console.log(EdisonUtil.stateToHTML(editorState));
+  console.log(convertToRaw(editorState.getCurrentContent()));
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 
   return (

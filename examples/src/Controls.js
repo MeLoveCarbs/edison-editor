@@ -23,9 +23,9 @@ export const EditorActionMap = {
     key: "STRIKETHROUGH",
     isBlockType: false,
   },
-  [FormatMenuOption.TextColor]: { key: "COLOR_red", isBlockType: false },
-  [FormatMenuOption.Highlight]: { key: "HIGHLIGHT", isBlockType: false },
-  [FormatMenuOption.Size]: { key: "FONT_SIZE_30", isBlockType: false },
+  [FormatMenuOption.TextColor]: { key: "color-red", isBlockType: false },
+  [FormatMenuOption.Highlight]: { key: "bgcolor-yellow", isBlockType: false },
+  [FormatMenuOption.Size]: { key: "fontsize-30", isBlockType: false },
   [FormatMenuOption.NumberedList]: {
     key: "ordered-list-item",
     isBlockType: true,

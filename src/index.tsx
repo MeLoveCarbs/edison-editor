@@ -1,15 +1,16 @@
 import React from "react";
-import { Editor, EditorProps } from "draft-js";
-import { inlineStyleMap, inlineStyleRender } from "./inline-style";
-import { blockStyleRender } from "./block-style";
-import { blockRender } from "./block-render";
+import { Editor, EditorProps, DraftInlineStyleType } from "draft-js";
+import { CustomStylePrefix } from "./constants";
+import inlineStyleRender from "./render/inline-style-render";
+import blockStyleRender from "./render/block-style-render";
+import blockRender from "./render/block-render";
 import "./assets/edison.css";
 
-export type { InlineStyleType } from "./inline-style";
-export type {
-  BlockType as AtomicBlockType,
-  BlockProps as AtomicBlockProps,
-} from "./block-render";
+export type InlineStyleType =
+  | DraftInlineStyleType
+  | `${typeof CustomStylePrefix[keyof typeof CustomStylePrefix]}${string}`;
+
+export type { EntityTypes, EntityProps } from "./constants";
 
 export * from "./utils";
 
@@ -25,7 +26,6 @@ const EdisonEditor = React.forwardRef<Editor, Props>((props: Props, ref) => {
     <Editor
       ref={ref}
       {...props}
-      customStyleMap={inlineStyleMap}
       customStyleFn={inlineStyleRender}
       blockStyleFn={blockStyleRender}
       blockRendererFn={blockRender}
