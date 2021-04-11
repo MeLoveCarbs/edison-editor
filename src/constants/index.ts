@@ -16,6 +16,13 @@ export const EntityTypeMap = {
   LinkEntityType: "LINK",
 } as const;
 
+export const EntityMutabilityMap = {
+  [EntityTypeMap.ImageEntityType]: "IMMUTABLE",
+  [EntityTypeMap.TableEntityType]: "IMMUTABLE",
+  [EntityTypeMap.BlockQuoteEntityType]: "IMMUTABLE",
+  [EntityTypeMap.LinkEntityType]: "MUTABLE",
+} as const;
+
 export type EntityTypes = typeof EntityTypeMap[keyof typeof EntityTypeMap];
 
 export type ImageProps = {

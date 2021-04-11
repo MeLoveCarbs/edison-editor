@@ -5,7 +5,12 @@ import {
   AtomicBlockUtils,
   Modifier,
 } from "draft-js";
-import { BlockDataKeyMap, EntityTypes, EntityProps } from "../constants";
+import {
+  BlockDataKeyMap,
+  EntityTypes,
+  EntityMutabilityMap,
+  EntityProps,
+} from "../constants";
 import { stateFromHTML } from "../conversion/state-from-html";
 import { stateToHTML } from "../conversion/state-to-html";
 
@@ -80,7 +85,7 @@ function onAddAtomicBlock<T extends EntityTypes>(
   const contentState = editorState.getCurrentContent();
   const contentStateWithEntity = contentState.createEntity(
     entityType,
-    "IMMUTABLE",
+    EntityMutabilityMap[entityType],
     params
   );
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();

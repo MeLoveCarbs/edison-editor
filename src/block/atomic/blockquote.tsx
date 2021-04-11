@@ -8,5 +8,9 @@ export const RendererFn: React.FunctionComponent<BlockQuoteProps> = ({
   if (showDetail) {
     return <blockquote dangerouslySetInnerHTML={{ __html: html }} />;
   }
-  return <div onClick={() => setShowDetail(true)}>...</div>;
+  return (
+    <div className="more-button" onClick={() => setShowDetail(true)}>
+      ...
+    </div>
+  );
 };
