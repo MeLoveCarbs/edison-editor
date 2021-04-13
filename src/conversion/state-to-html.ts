@@ -32,11 +32,24 @@ const entityMapNode = (entity: EntityInstance) => {
     };
   }
 
-  if (entityType === EntityTypeMap.TableEntityType) {
+  if (entityType === EntityTypeMap.BlockQuoteEntityType) {
     return {
-      element: "img",
+      element: "blockquote",
       attributes: {
         innerHTML: data.html,
+        class: data.className,
+        style: data.style,
+      },
+    };
+  }
+
+  if (entityType === EntityTypeMap.TableEntityType) {
+    return {
+      element: "table",
+      attributes: {
+        innerHTML: data.html,
+        class: data.className,
+        style: data.style,
       },
     };
   }
@@ -52,12 +65,6 @@ export function stateToHTML(state: EditorState) {
     blockStyleFn: (block: ContentBlock) => {
       const className = blockStyleRender(block);
       const style = classMapStyle(className);
-      if (block.getType() === "atomic") {
-        return {
-          element: "div",
-          style,
-        };
-      }
       return {
         style,
       };
@@ -75,6 +82,22 @@ export function stateToHTML(state: EditorState) {
       el.innerHTML = innerHTML;
       el.removeAttribute("innerHTML");
     }
+  });
+  const allBlockQuote = boxNode.querySelectorAll("blockquote");
+  allBlockQuote.forEach((el) => {
+    const innerHTML = el.getAttribute("innerHTML");
+    if (innerHTML) {
+      el.innerHTML = innerHTML;
+      el.removeAttribute("innerHTML");
+    }
+  });
+  const allFigures = boxNode.querySelectorAll("figure");
+  allFigures.forEach((el) => {
+    const newNode = document.createElement("div");
+    el.childNodes.forEach((child) => {
+      newNode.appendChild(child);
+    });
+    boxNode.replaceChild(newNode, el);
   });
   return boxNode.innerHTML;
 }

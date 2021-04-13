@@ -34,6 +34,8 @@ function customChunkRenderer(nodeName: string, node: HTMLElement) {
   if (nodeName === "table") {
     const data: AtomicEntityProps<typeof EntityTypeMap.TableEntityType> = {
       html: node.innerHTML,
+      className: node.getAttribute("class"),
+      style: node.getAttribute("style"),
     };
     return {
       type: EntityTypeMap.TableEntityType,
@@ -44,6 +46,8 @@ function customChunkRenderer(nodeName: string, node: HTMLElement) {
   if (nodeName === "blockquote") {
     const data: AtomicEntityProps<typeof EntityTypeMap.BlockQuoteEntityType> = {
       html: node.innerHTML,
+      className: node.getAttribute("class"),
+      style: node.getAttribute("style"),
     };
     return {
       type: EntityTypeMap.BlockQuoteEntityType,

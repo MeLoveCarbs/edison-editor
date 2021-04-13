@@ -22,8 +22,12 @@ export type ImageProps = {
   height?: string;
   width?: string;
 };
-export type TableProps = { html: string };
-export type BlockQuoteProps = { html: string };
+export type TableProps = { html: string; className: string; style: string };
+export type BlockQuoteProps = {
+  html: string;
+  className: string;
+  style: string;
+};
 export type LinkProps = { url: string; text: string };
 
 export type AtomicEntityTypes =
