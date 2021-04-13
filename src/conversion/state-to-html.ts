@@ -94,9 +94,7 @@ export function stateToHTML(state: EditorState) {
   const allFigures = boxNode.querySelectorAll("figure");
   allFigures.forEach((el) => {
     const newNode = document.createElement("div");
-    el.childNodes.forEach((child) => {
-      newNode.appendChild(child);
-    });
+    newNode.innerHTML = el.innerHTML;
     boxNode.replaceChild(newNode, el);
   });
   return boxNode.innerHTML;
