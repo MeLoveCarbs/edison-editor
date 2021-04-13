@@ -4,9 +4,9 @@ import {
   ContentBlock,
   CompositeDecorator,
 } from "draft-js";
-import htmlToState from "html-to-draftjs";
-import { EntityTypeMap, AtomicEntityProps } from "../constants";
-import { RendererFn as Link } from "../block/normal/link";
+import htmlToState from "./html-to-draftjs";
+import { EntityTypeMap, AtomicEntityProps } from "../../constants";
+import { RendererFn as Link } from "../../block/normal/link";
 
 function findLinkEntities(
   block: ContentBlock,
