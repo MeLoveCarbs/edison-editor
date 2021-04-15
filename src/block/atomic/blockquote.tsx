@@ -5,7 +5,7 @@ export const RendererFn: React.FunctionComponent<BlockQuoteProps> = ({
   html,
   className,
 }: BlockQuoteProps) => {
-  const [showDetail, setShowDetail] = useState(false);
+  const [showDetail, setShowDetail] = useState(true);
   if (showDetail) {
     return <blockquote dangerouslySetInnerHTML={{ __html: html }} />;
   }
