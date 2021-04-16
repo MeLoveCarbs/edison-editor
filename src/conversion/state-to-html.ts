@@ -70,6 +70,7 @@ export function stateToHTML(state: EditorState) {
       };
     },
     entityStyleFn: entityMapNode,
+    defaultBlockTag: "div",
   };
 
   const formatStr = conversion(state.getCurrentContent(), options);
