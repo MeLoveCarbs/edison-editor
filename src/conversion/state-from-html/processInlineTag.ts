@@ -3,6 +3,7 @@ import { OrderedSet } from "immutable";
 const inlineTags = {
   code: "CODE",
   s: "STRIKETHROUGH",
+  strike: "STRIKETHROUGH",
   del: "STRIKETHROUGH",
   i: "ITALIC",
   em: "ITALIC",
