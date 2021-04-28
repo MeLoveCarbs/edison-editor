@@ -1,6 +1,6 @@
 {
   "name": "edison-editor",
-  "version": "0.10.105",
+  "version": "0.10.110",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
