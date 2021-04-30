@@ -13,6 +13,7 @@ import {
   AtomicEntityProps,
   LinkProps,
 } from "../constants";
+import { OrderedSet } from "immutable";
 import { stateFromHTML } from "../conversion/state-from-html";
 import { stateToHTML } from "../conversion/state-to-html";
 
@@ -97,12 +98,12 @@ function onAddAtomicBlock<T extends AtomicEntityTypes>(
   return AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ");
 }
 
-function onAddLink(params: LinkProps, editorState: EditorState) {
+function onToggleLink(url: string, editorState: EditorState) {
   const contentState = editorState.getCurrentContent();
   const contentStateWithEntity = contentState.createEntity(
     EntityTypeMap.LinkEntityType,
     "MUTABLE",
-    params
+    { url }
   );
   const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
   const newEditorState = EditorState.set(editorState, {
@@ -113,6 +114,36 @@ function onAddLink(params: LinkProps, editorState: EditorState) {
     newEditorState.getSelection(),
     entityKey
   );
+}
+
+function onAddLink(params: LinkProps, editorState: EditorState) {
+  const contentState = editorState.getCurrentContent();
+  const selection = editorState.getSelection();
+  const startKey = selection.getStartKey();
+  const startOffset = selection.getStartOffset();
+  const newSelectionState = selection.merge({
+    anchorKey: startKey,
+    anchorOffset: startOffset + params.text.length,
+    focusKey: startKey,
+    focusOffset: startOffset + params.text.length,
+  });
+  const contentStateWithEntity = contentState.createEntity(
+    EntityTypeMap.LinkEntityType,
+    "MUTABLE",
+    params
+  );
+  const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+  const newContent = Modifier.insertText(
+    contentStateWithEntity,
+    selection,
+    params.text,
+    OrderedSet(),
+    entityKey
+  );
+  return EditorState.set(editorState, {
+    currentContent: newContent,
+    selection: newSelectionState,
+  });
 }
 
 function clearAllInlineStyle(editorState: EditorState) {
@@ -150,7 +181,16 @@ function changeBlocksDepth(
     const newData = { [BlockDataKeyMap.textIndent]: newIndent };
     return block.merge({ data: newData }) as ContentBlock;
   };
-  return modifyBlockForContentState(editorState, changeBlocksDepthMap, true);
+  const newState = modifyBlockForContentState(
+    editorState,
+    changeBlocksDepthMap,
+    true
+  );
+  return EditorState.push(
+    editorState,
+    newState.getCurrentContent(),
+    "change-block-data"
+  );
 }
 
 function indentIncrease(editorState: EditorState) {
@@ -180,7 +220,7 @@ function isInIndentBlockBeginning(editorState: EditorState) {
 export const EdisonUtil = {
   stateFromHTML,
   stateToHTML,
-  getSelectedBlocks,
+  onToggleLink,
   onAddLink,
   onAddAtomicBlock,
   clearAllInlineStyle,

@@ -88,6 +88,23 @@ function App() {
     }
   };
 
+  const handlePastedText = (text, html) => {
+    if (!html) {
+      const urlReg = /^(https?|ftp|file):\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]$/;
+      if (urlReg.test(text)) {
+        const newState = EdisonUtil.onAddLink(
+          { url: text, text: text },
+          editorState
+        );
+        setEditorState(newState);
+        return "handled";
+      } else {
+        return "not-handled";
+      }
+    }
+    return "not-handled";
+  };
+
   console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
   console.log(EdisonUtil.stateToHTML(editorState));
   console.log(convertToRaw(editorState.getCurrentContent()));
@@ -107,6 +124,7 @@ function App() {
             editorState={editorState}
             onChange={setEditorState}
             handleKeyCommand={handleKeyCommand}
+            handlePastedText={handlePastedText}
             keyBindingFn={mapKeyToEditorCommand}
             placeholder={placeholder}
           />
