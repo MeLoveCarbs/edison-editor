@@ -102,6 +102,19 @@ function App() {
         return "not-handled";
       }
     }
+    const imgReg = /<img[^>]+src\s*=['"\s]?(?<url>[^>]+?)['"]?\s+[^>]*>/gi;
+    const paths = [];
+    let res = imgReg.exec(html);
+    while (res) {
+      const localFilePath = res.groups.url;
+      if (localFilePath && localFilePath.startsWith("http")) {
+        paths.push(localFilePath);
+      }
+      res = imgReg.exec(html);
+    }
+    if (paths.length) {
+      console.log("pasted local files:", paths);
+    }
     return "not-handled";
   };
 
