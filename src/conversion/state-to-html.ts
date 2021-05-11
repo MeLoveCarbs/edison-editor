@@ -5,7 +5,11 @@ import {
   DraftInlineStyle,
 } from "draft-js";
 import { stateToHTML as conversion } from "draft-js-export-html";
-import { EntityTypeMap, BlockClassNamePrefix } from "../constants";
+import {
+  EntityTypeMap,
+  BlockClassNamePrefix,
+  BlockDataKeyMap,
+} from "../constants";
 import inlineStyleRender from "../render/inline-style-render";
 import blockStyleRender from "../render/block-style-render";
 
@@ -63,10 +67,14 @@ export function stateToHTML(state: EditorState) {
       };
     },
     blockStyleFn: (block: ContentBlock) => {
-      const className = blockStyleRender(block);
-      const style = classMapStyle(className);
+      const styleClassName = blockStyleRender(block);
+      const style = classMapStyle(styleClassName);
+      const className = block.getData().get(BlockDataKeyMap.className);
       return {
         style,
+        attributes: {
+          class: className || "",
+        },
       };
     },
     entityStyleFn: entityMapNode,

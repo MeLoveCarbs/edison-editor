@@ -176,9 +176,12 @@ function changeBlocksDepth(
   maxDepth: number
 ) {
   const changeBlocksDepthMap = (block: ContentBlock) => {
-    const oldIndent = block.getData().get(BlockDataKeyMap.textIndent) || 0;
+    const oldData = block.getData();
+    const oldIndent = oldData.get(BlockDataKeyMap.textIndent) || 0;
     const newIndent = Math.min(Math.max(oldIndent + adjustment, 0), maxDepth);
-    const newData = { [BlockDataKeyMap.textIndent]: newIndent };
+    const newData = oldData.merge({
+      [BlockDataKeyMap.textIndent]: newIndent,
+    });
     return block.merge({ data: newData }) as ContentBlock;
   };
   const newState = modifyBlockForContentState(

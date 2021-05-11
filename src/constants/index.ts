@@ -43,6 +43,8 @@ export type AtomicEntityProps<T extends AtomicEntityTypes> = {
 
 export const BlockDataKeyMap = {
   textIndent: "textIndent",
+  className: "className",
+  textAlign: "textAlign",
 } as const;
 
 export const BlockClassNamePrefix = {
