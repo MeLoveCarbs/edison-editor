@@ -17,6 +17,7 @@ export type {
 } from "./constants";
 
 export * from "./utils";
+export * from "./events";
 
 type WithoutProps =
   | "blockRendererFn"
