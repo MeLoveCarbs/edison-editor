@@ -1,6 +1,6 @@
 {
   "name": "edison-editor",
-  "version": "0.10.155",
+  "version": "0.10.160",
   "description": "",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -26,12 +26,12 @@
     "typescript": "^4.1.3"
   },
   "dependencies": {
-    "@types/draft-js": "^0.10.44",
+    "@types/draft-js": "^0.11.3",
     "draft-js-export-html": "^1.4.1",
     "immutable": "~3.7.4"
   },
   "peerDependencies": {
-    "draft-js": "^0.10.5",
+    "draft-js": "^0.11.7",
     "react": "^17.0.1",
     "react-dom": "^17.0.1"
   }
