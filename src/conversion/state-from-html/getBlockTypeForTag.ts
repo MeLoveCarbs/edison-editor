@@ -42,7 +42,7 @@ const blockRenderMap = Map<{
   },
   unstyled: {
     element: "p",
-    aliasedElements: ["div"],
+    aliasedElements: ["div", "br"],
   },
 });
 

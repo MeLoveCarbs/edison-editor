@@ -61,10 +61,6 @@ function genFragment(
     return createTextChunk(node, inlineStyle, inEntity);
   }
 
-  if (nodeName === "br") {
-    return { chunk: getSoftNewlineChunk() };
-  }
-
   if (nodeName === "img" && node instanceof HTMLImageElement) {
     const entityConfig: Record<string, unknown> = {};
     entityConfig.src = node.getAttribute
