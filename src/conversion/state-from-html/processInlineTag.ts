@@ -20,6 +20,11 @@ export default function processInlineTag(
   node: Element,
   currentStyle: OrderedSet<string>
 ) {
+  if (tag === "body") {
+    // Do not send the body style to child nodes
+    // because the body will merge with the outermost one
+    return currentStyle;
+  }
   const styleToCheck = inlineTags[tag as keyof typeof inlineTags];
   if (styleToCheck) {
     return currentStyle.add(styleToCheck).toOrderedSet();
