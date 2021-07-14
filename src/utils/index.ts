@@ -176,13 +176,13 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   if (inlineStyle.includes(CustomStylePrefix.HIGH_LIGHT_COLOR)) {
     return RichUtils.toggleInlineStyle(editorState, inlineStyle);
   }
-  const allInline = editorState.getCurrentInlineStyle().toArray();
   const stypeType = KeepStylePrefix.find((item) =>
     inlineStyle.startsWith(item)
   );
   if (stypeType === undefined) {
     return editorState;
   }
+  const allInline = editorState.getCurrentInlineStyle().toArray();
   const shouldClearInline = allInline.filter((item) =>
     item.startsWith(stypeType)
   );
