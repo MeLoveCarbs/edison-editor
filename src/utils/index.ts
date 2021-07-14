@@ -12,6 +12,7 @@ import {
   AtomicEntityTypes,
   AtomicEntityProps,
   LinkProps,
+  CustomStylePrefix,
 } from "../constants";
 import { OrderedSet } from "immutable";
 import { stateFromHTML } from "../conversion/state-from-html";
@@ -170,6 +171,31 @@ function clearAllInlineStyle(editorState: EditorState) {
   return EditorState.push(editorState, contentState, "change-inline-style");
 }
 
+function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
+  const allInline = editorState.getCurrentInlineStyle().toArray();
+  const inlineIsOpen = allInline.includes(inlineStyle);
+  if (inlineIsOpen) {
+    return;
+  } else {
+    const stypeType = Object.values(CustomStylePrefix).find((item) =>
+      inlineStyle.startsWith(item)
+    );
+    const shouldClearInline = allInline.filter((item) =>
+      item.startsWith(stypeType)
+    );
+    let contentState = editorState.getCurrentContent();
+    shouldClearInline.forEach((style) => {
+      contentState = Modifier.removeInlineStyle(
+        contentState,
+        editorState.getSelection(),
+        style
+      );
+    });
+    contentState = Modifier.applyInlineStyle(contentState, editorState.getSelection(), inlineStyle)
+    return EditorState.push(editorState, contentState, "change-inline-style");
+  }
+}
+
 function changeBlocksDepth(
   editorState: EditorState,
   adjustment: number,
@@ -227,6 +253,7 @@ export const EdisonUtil = {
   onAddLink,
   onAddAtomicBlock,
   clearAllInlineStyle,
+  toggleInlineStyle,
   indentIncrease,
   indentDecrease,
   isInIndentBlockBeginning,
