@@ -173,12 +173,6 @@ function clearAllInlineStyle(editorState: EditorState) {
 }
 
 function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
-  const neededStyles = Object.values(CustomStylePrefix).find((item) =>
-    inlineStyle.startsWith(item)
-  );
-  if (!neededStyles) {
-    return editorState;
-  }
   const keepStyleType = KeepStylePrefix.find((item) =>
     inlineStyle.startsWith(item)
   );

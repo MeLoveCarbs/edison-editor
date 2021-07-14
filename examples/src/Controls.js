@@ -7,7 +7,9 @@ export const FormatMenuOption = {
   StrikeThrough: "StrikeThrough",
   TextColor: "TextColor",
   Highlight: "Highlight",
-  Size: "Size",
+  Size30: "Size30",
+  Size16: "Size16",
+  Size12: "Size12",
   NumberedList: "NumberedList",
   BulletList: "BulletList",
   IndentIncrease: "IndentIncrease",
@@ -25,7 +27,9 @@ export const EditorActionMap = {
   },
   [FormatMenuOption.TextColor]: { key: "color-red", isBlockType: false },
   [FormatMenuOption.Highlight]: { key: "bgcolor-yellow", isBlockType: false },
-  [FormatMenuOption.Size]: { key: "fontsize-30", isBlockType: false },
+  [FormatMenuOption.Size30]: { key: "fontsize-30", isBlockType: false },
+  [FormatMenuOption.Size16]: { key: "fontsize-16", isBlockType: false },
+  [FormatMenuOption.Size12]: { key: "fontsize-12", isBlockType: false },
   [FormatMenuOption.NumberedList]: {
     key: "ordered-list-item",
     isBlockType: true,
@@ -164,13 +168,43 @@ export const FormattingMenu = ({ onPress, activeFormats }) => {
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="black"
+          width="30px"
+          height="30px"
+        >
+          <path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z" />
+        </svg>
+      ),
+      onPress: () => onPress(FormatMenuOption.Size30),
+      selected: false,
+    },    
+    {
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="black"
           width="24px"
           height="24px"
         >
           <path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z" />
         </svg>
       ),
-      onPress: () => onPress(FormatMenuOption.Size),
+      onPress: () => onPress(FormatMenuOption.Size16),
+      selected: false,
+    },    
+    {
+      icon: (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 24 24"
+          fill="black"
+          width="20px"
+          height="20px"
+        >
+          <path d="M9 4v3h5v12h3V7h5V4H9zm-6 8h3v7h3v-7h3V9H3v3z" />
+        </svg>
+      ),
+      onPress: () => onPress(FormatMenuOption.Size12),
       selected: false,
     },
     {

@@ -66,6 +66,7 @@ function App() {
       return;
     }
     const action = EditorActionMap[option];
+    console.log('OPTION', option)
     if (!action || !action.key) {
       return;
     }
@@ -84,7 +85,7 @@ function App() {
     if (action.isBlockType) {
       setEditorState(RichUtils.toggleBlockType(editorState, action.key));
     } else {
-      setEditorState(RichUtils.toggleInlineStyle(editorState, action.key));
+      setEditorState(EdisonUtil.toggleInlineStyle(editorState, action.key));
     }
   };
 
