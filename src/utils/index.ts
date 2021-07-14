@@ -173,18 +173,21 @@ function clearAllInlineStyle(editorState: EditorState) {
 }
 
 function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
-  if (inlineStyle.includes(CustomStylePrefix.HIGH_LIGHT_COLOR)) {
-    return RichUtils.toggleInlineStyle(editorState, inlineStyle);
-  }
-  const stypeType = KeepStylePrefix.find((item) =>
+  const neededStyles = Object.values(CustomStylePrefix).find((item) =>
     inlineStyle.startsWith(item)
   );
-  if (stypeType === undefined) {
+  if (neededStyles === undefined) {
     return editorState;
+  }
+  const keepStyleType = KeepStylePrefix.find((item) =>
+    inlineStyle.startsWith(item)
+  );
+  if (!keepStyleType) {
+    return RichUtils.toggleInlineStyle(editorState, inlineStyle);
   }
   const allInline = editorState.getCurrentInlineStyle().toArray();
   const shouldClearInline = allInline.filter((item) =>
-    item.startsWith(stypeType)
+    item.startsWith(keepStyleType)
   );
   let contentState = editorState.getCurrentContent();
   shouldClearInline.forEach((style) => {
