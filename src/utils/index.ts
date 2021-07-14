@@ -182,7 +182,7 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   const keepStyleType = KeepStylePrefix.find((item) =>
     inlineStyle.startsWith(item)
   );
-  if (!keepStyleType) {
+  if (keepStyleType === undefined) {
     return RichUtils.toggleInlineStyle(editorState, inlineStyle);
   }
   const allInline = editorState.getCurrentInlineStyle().toArray();
