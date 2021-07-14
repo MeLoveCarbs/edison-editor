@@ -175,7 +175,7 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   const allInline = editorState.getCurrentInlineStyle().toArray();
   const inlineIsOpen = allInline.includes(inlineStyle);
   if (inlineIsOpen) {
-    return;
+    return editorState;
   } else {
     const stypeType = Object.values(CustomStylePrefix).find((item) =>
       inlineStyle.startsWith(item)
