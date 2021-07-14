@@ -180,6 +180,9 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   const stypeType = Object.values(CustomStylePrefix).find((item) =>
     inlineStyle.startsWith(item)
   );
+  if (stypeType === undefined) {
+    return editorState;
+  }
   const shouldClearInline = allInline.filter((item) =>
     item.startsWith(stypeType)
   );
