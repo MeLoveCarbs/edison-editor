@@ -5,6 +5,12 @@ export const CustomStylePrefix = {
   FONT_FAMILY: "fontfamily-",
 } as const;
 
+export const KeepStylePrefix = [
+  CustomStylePrefix.COLOR,
+  CustomStylePrefix.FONT_SIZE,
+  CustomStylePrefix.FONT_FAMILY,
+] as const;
+
 export const BlockMap = {
   Atomic: "atomic",
 } as const;

@@ -13,6 +13,7 @@ import {
   AtomicEntityProps,
   LinkProps,
   CustomStylePrefix,
+  KeepStylePrefix,
 } from "../constants";
 import { OrderedSet } from "immutable";
 import { stateFromHTML } from "../conversion/state-from-html";
@@ -172,12 +173,11 @@ function clearAllInlineStyle(editorState: EditorState) {
 }
 
 function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
-  const allInline = editorState.getCurrentInlineStyle().toArray();
-  const inlineIsOpen = allInline.includes(inlineStyle);
-  if (inlineIsOpen) {
+  if (inlineStyle.includes(CustomStylePrefix.HIGH_LIGHT_COLOR)) {
     return RichUtils.toggleInlineStyle(editorState, inlineStyle);
   }
-  const stypeType = Object.values(CustomStylePrefix).find((item) =>
+  const allInline = editorState.getCurrentInlineStyle().toArray();
+  const stypeType = KeepStylePrefix.find((item) =>
     inlineStyle.startsWith(item)
   );
   if (stypeType === undefined) {
