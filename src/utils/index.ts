@@ -176,7 +176,7 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   const inlineIsOpen = allInline.includes(inlineStyle);
   if (inlineIsOpen) {
     return RichUtils.toggleInlineStyle(editorState, inlineStyle);
-  } else {
+  }
     const stypeType = Object.values(CustomStylePrefix).find((item) =>
       inlineStyle.startsWith(item)
     );
@@ -193,7 +193,6 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
     });
     contentState = Modifier.applyInlineStyle(contentState, editorState.getSelection(), inlineStyle)
     return EditorState.push(editorState, contentState, "change-inline-style");
-  }
 }
 
 function changeBlocksDepth(
