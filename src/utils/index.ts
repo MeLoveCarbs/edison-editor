@@ -176,13 +176,13 @@ function toggleInlineStyle(editorState: EditorState, inlineStyle: string) {
   const neededStyles = Object.values(CustomStylePrefix).find((item) =>
     inlineStyle.startsWith(item)
   );
-  if (neededStyles === undefined) {
+  if (!neededStyles) {
     return editorState;
   }
   const keepStyleType = KeepStylePrefix.find((item) =>
     inlineStyle.startsWith(item)
   );
-  if (keepStyleType === undefined) {
+  if (!keepStyleType) {
     return RichUtils.toggleInlineStyle(editorState, inlineStyle);
   }
   const allInline = editorState.getCurrentInlineStyle().toArray();
